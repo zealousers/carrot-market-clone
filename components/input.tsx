@@ -16,7 +16,7 @@ export default function Input({
         name={name}
         {...rest}
       />
-      {errors?.map((error, index) => (
+      {errors.map((error, index) => (
         <span key={index} className='text-red-500'>
           {error}
         </span>

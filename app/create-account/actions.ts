@@ -1,4 +1,5 @@
 "use server";
+import { PASSWORD_MATCH_ERROR, PASSWORD_REGEX_ERROR, USERNAME_ERROR, USERNAME_INVALID_TYPE_ERROR, USERNAME_REQUIRED_ERROR } from "@/lib/constants";
 import {z} from "zod";
 // const usernameSchema = z.string().min(5).max(10);
 
@@ -9,19 +10,19 @@ const checkPassword = ({password,confirmPassword}:{password:string,confirmPasswo
 const formSchema =z.object({
   username:z
   .string({
-    invalid_type_error:"Username must be a string!",
-    required_error:"Where is my username???"
+    invalid_type_error: USERNAME_INVALID_TYPE_ERROR,
+    required_error:USERNAME_REQUIRED_ERROR,
   })
   .min(3,"Way too short!!!")
   .max(10,"Way too long!!!")
   .trim()
   .toLowerCase()
   .transform((username) => `🔥 ${username}`)
-  .refine(checkUsername,"Username cannot contain the word 'admin'"),
+  .refine(checkUsername,USERNAME_ERROR),
   email:z.string().email().toLowerCase().trim(),
-  password:z.string().min(10).trim().regex(passwordRegex,"A password must contain at least one lowercase letter, one uppercase letter, one number, and one special character."),
+  password:z.string().min(10).trim().regex(passwordRegex,PASSWORD_REGEX_ERROR),
   confirmPassword:z.string().min(10).trim(),
-}).refine(checkPassword,{message:"Passwords do not match",path:["confirmPassword"]});
+}).refine(checkPassword,{message:PASSWORD_MATCH_ERROR,path:["confirmPassword"]});
 
 
 export async function createAccount(prevState:any,formData:FormData){

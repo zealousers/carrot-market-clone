@@ -2,20 +2,12 @@
 import Input from "@/components/input";
 import Button from "@/components/button";
 import SocialLogin from "@/components/social-login";
-import { redirect } from "next/dist/server/api-utils";
 import { useFormState } from "react-dom";
-import { handleForm } from "./actions";
+import { login } from "./actions";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 
 export default function Login() {
-  // const onClick = async () => {
-  //   const response = await fetch("/api/users", {
-  //     method: "POST",
-  //     body: JSON.stringify({ username: "choi", password: "1234" }),
-  //   });
-  //   console.log(await response.json());
-  // };
-
-  const [state, action] = useFormState(handleForm, null);
+  const [state, action] = useFormState(login, null);
   return (
     <div className='flex flex-col gap-10 py-8 px-6'>
       <div className='flex flex-col gap-2 *:font-medium'>
@@ -23,13 +15,20 @@ export default function Login() {
         <h2 className='text-xl'>Log in with email and password.</h2>
       </div>
       <form action={action} className='flex flex-col gap-3'>
-        <Input type='email' placeholder='Email' required={true} errors={[]} name='email' />
+        <Input
+          type='email'
+          placeholder='Email'
+          required={true}
+          name='email'
+          errors={state?.fieldErrors.email}
+        />
         <Input
           type='password'
           placeholder='Password'
           required={true}
-          errors={state?.errors ?? []}
           name='password'
+          min={PASSWORD_MIN_LENGTH}
+          errors={state?.fieldErrors.password}
         />
         {/* <span onClick={onClick}> */}
         <Button text='Login' />
