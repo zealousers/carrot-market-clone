@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import "@/lib/db";
+
 export default function Home() {
   return (
     // <main className='bg-gray-300 h-screen flex items-center justify-center px-32'>
