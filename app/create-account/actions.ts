@@ -93,7 +93,7 @@ const cookie = await getIronSession(cookies(),{
   password:process.env.COOKIE_PASSWORD!
 })
 //@ts-ignore
-session.id=user.id
+cookie.id=user.id
 await cookie.save();
 redirect('/profile');
 }
