@@ -4,6 +4,9 @@ import {z} from "zod";
 // const usernameSchema = z.string().min(5).max(10);
 import db from "@/lib/db";
 import bcrypt from "bcrypt";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const passwordRegex= new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
 const checkUsername =(username:string)=> !username.includes("admin");
@@ -84,23 +87,14 @@ export async function createAccount(prevState:any,formData:FormData){
         id:true,
       },
     })
-console.log(user);
-// if(user){
-//   const email= await db.user.findUnique({
-//     where:{
-//       email:result.data.email,
-//     },
-//     select:{
-//       id:true,
-//     }
-// })
-    // check if username is taken
-    // check if the email os already used
-    // hash password
-    // save the user to db
-    // log the user in
-    // redirect "/home"
-    // console.log(result.data)
-    
+// console.log(user);
+const cookie = await getIronSession(cookies(),{
+  cookieName:"delicious-carrot",
+  password:process.env.COOKIE_PASSWORD!
+})
+//@ts-ignore
+session.id=user.id
+await cookie.save();
+redirect('/profile');
 }
 }
