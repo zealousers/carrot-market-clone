@@ -17,9 +17,11 @@ export async function login(prevState:any, formData:FormData){
   }
   const result = formSchema.safeParse(data);
   if(!result.success){
-    console.log(result.error.flatten());
+    // console.log(result.error.flatten());
     return result.error.flatten();
-  }else {console.log(result.data)}
+  }else {
+    // console.log(result.data)
+  }
   // return { errors: ["wrong password","password too short"],      
   //   };
 }

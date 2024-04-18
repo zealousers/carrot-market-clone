@@ -3,6 +3,7 @@ import { PASSWORD_MATCH_ERROR, PASSWORD_REGEX_ERROR, USERNAME_ERROR, USERNAME_IN
 import {z} from "zod";
 // const usernameSchema = z.string().min(5).max(10);
 import db from "@/lib/db";
+import bcrypt from "bcrypt";
 
 const passwordRegex= new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
 const checkUsername =(username:string)=> !username.includes("admin");
@@ -64,14 +65,26 @@ export async function createAccount(prevState:any,formData:FormData){
     password:formData.get("password"),
     confirmPassword:formData.get("confirmPassword"),
   };
-  console.log(data);
+  // console.log(data);
   // usernameSchema.parse(data.username);
   const result = await formSchema.safeParseAsync(data);
   
   if(!result.success){
     return result.error.flatten();
-  } else {checkUniqueUsername(result.data.username)
-
+  } else {
+    const hashedPassword = await bcrypt.hash(result.data.password,12);
+    console.log(hashedPassword);
+    const user = await db.user.create({
+      data:{
+        username:result.data.username,
+        email:result.data.email,
+        password:hashedPassword,
+      },
+      select:{
+        id:true,
+      },
+    })
+console.log(user);
 // if(user){
 //   const email= await db.user.findUnique({
 //     where:{
