@@ -28,7 +28,7 @@ async function test(){
       id:1,
     },include:{user:true}
   })
-  console.log(tokens)
+  // console.log(tokens)
 }
 test()
 export default db;
