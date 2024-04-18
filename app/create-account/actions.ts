@@ -70,7 +70,7 @@ export async function createAccount(prevState:any,formData:FormData){
   };
   // console.log(data);
   // usernameSchema.parse(data.username);
-  const result = await formSchema.safeParseAsync(data);
+  const result = await formSchema.spa(data);
   
   if(!result.success){
     return result.error.flatten();
