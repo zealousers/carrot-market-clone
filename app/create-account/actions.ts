@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import getSession from "@/lib/session";
 
 const passwordRegex= new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
 const checkUsername =(username:string)=> !username.includes("admin");
@@ -76,7 +77,7 @@ export async function createAccount(prevState:any,formData:FormData){
     return result.error.flatten();
   } else {
     const hashedPassword = await bcrypt.hash(result.data.password,12);
-    console.log(hashedPassword);
+    //console.log(hashedPassword);
     const user = await db.user.create({
       data:{
         username:result.data.username,
@@ -88,13 +89,9 @@ export async function createAccount(prevState:any,formData:FormData){
       },
     })
 // console.log(user);
-const cookie = await getIronSession(cookies(),{
-  cookieName:"delicious-carrot",
-  password:process.env.COOKIE_PASSWORD!
-})
-//@ts-ignore
-cookie.id=user.id
-await cookie.save();
+const session = await getSession();
+session.id=user.id
+await session.save();
 redirect('/profile');
 }
 }
