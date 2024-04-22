@@ -5,6 +5,9 @@ interface SessionContent {
   id?:number // ?의 의미는 로그인한 사용자만 쿠키에 id를 가지고 있기 때문에.
 }
 export default function getSession(){
+
+  console.log(cookies())
+  
   return getIronSession<SessionContent>(
 cookies(), {cookieName:"delicious-carrot",
   password:process.env.COOKIE_PASSWORD!})
