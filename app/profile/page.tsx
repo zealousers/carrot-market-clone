@@ -20,10 +20,10 @@ async function getUser() {
 export default async function Profile() {
   const user = await getUser();
   const logOut = async () => {
-    "user server";
+    "use server";
     const session = await getSession();
     await session.destroy();
-    redirect("/login");
+    redirect("/");
   };
   return (
     <>
