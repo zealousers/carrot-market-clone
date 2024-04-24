@@ -6,6 +6,7 @@ import validator from "validator";
 import { redirect } from "next/navigation";
 import crypto from "crypto";
 import getSession from "@/lib/session";
+import twilio from "twilio";
 
 
 const phoneSchema = z.string().trim().refine((phone)=>validator.isMobilePhone(phone,"ko-KR"),"Wrong phone format");
@@ -90,7 +91,18 @@ const token=await getToken()
         }
       })// create new token
       // send the token using SMS
-      return{token:true};
+      const client = twilio(
+        process.env.TWILIO_ACCOUNT_SID!,
+        process.env.TWILIO_AUTH_TOKEN!
+            )
+            await client.messages.create({
+              body:`You Carrot verification code is ${token}`,
+              from:process.env.TWILIO_PHONE_NUMBER!,
+              to:process.env.MY_PHONE_NUMBER!,
+            })
+      return {
+        token:true
+      };
     }
   } else{
     const result= await tokenSchema.spa(token);
