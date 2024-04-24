@@ -22,13 +22,13 @@ const db = new PrismaClient();
 //   })
 //   console.log(tokens)
 // }
-async function test(){
-  const tokens= await db.sMSToken.findUnique({
-    where:{
-      id:1,
-    },include:{user:true}
-  })
-  // console.log(tokens)
-}
-test()
+// async function test(){
+//   const tokens= await db.sMSToken.findUnique({
+//     where:{
+//       id:1,
+//     },include:{user:true}
+//   })
+//   console.log(tokens)
+// }
+// test()
 export default db;
